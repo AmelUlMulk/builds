@@ -2,8 +2,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import Hamburger from 'hamburger-react';
-import Container from 'react-bootstrap/Container';
 import SideNav from './SideNav';
 import logo from '../assets/svg/logo.svg';
 
@@ -38,7 +36,7 @@ const NavBar = () => {
   // eslint-disable-next-line no-console
   return (
     <header className="Navbar relative py-5 bg-gray-100">
-      <Container>
+      <div>
         <div className="flex justify-between items-center px-5">
           <Link href="/">
             <div className="logo">
@@ -52,9 +50,7 @@ const NavBar = () => {
           </Link>
 
           {mediaQuery ? (
-            <div className="pr-10">
-              <Hamburger toggled={isOpen} toggle={() => setOpen(!isOpen)} />
-            </div>
+            <div className="pr-10"></div>
           ) : (
             <div className="Navlinks flex gap-4">
               <Link
@@ -130,7 +126,7 @@ const NavBar = () => {
             </div>
           )}
         </div>
-      </Container>
+      </div>
       <SideNav isOpen={isOpen} setOpen={setOpen} />
     </header>
   );

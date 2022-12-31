@@ -1,12 +1,40 @@
 import React from 'react';
 import Image from 'next/image';
 import PageHero from '../components/Contact/PageHero';
+import client from '../utils/connections/AppoloClient';
+import { CONTACT_PAGE, CONTACT_PAGE_INTERFACE } from '../api/contactPage';
+import Head from 'next/head';
 
-const Contact = () => {
-  const canada_address: string[] = ['5779 Desson Avenue', 'Niagara Falls', 'Ontario, Canada L2G 3T5'];
-  const usa_address: string[] = ['486 19th street', 'Niagara Falls', 'Buffalo, USA NY 14303'];
+export async function getStaticProps() {
+  const { data } = await client.query<CONTACT_PAGE_INTERFACE>(CONTACT_PAGE);
+  return {
+    props: {
+      contactPage: data.contactPage
+    }
+  };
+}
+
+const Contact = ({
+  contactPage: {
+    slug,
+    pageTitle,
+    subheader,
+    metaDescription,
+    canonical,
+    tollFree,
+    fax,
+    email,
+    address,
+    header,
+    local
+  }
+}: CONTACT_PAGE_INTERFACE) => {
   return (
     <div className="Contact">
+      <Head>
+        <title>{pageTitle}</title>
+        <link href={canonical} rel="canonical"></link>
+      </Head>
       <PageHero />
       <section className="Call_us container pl-20 pb-10">
         <div className="Contact_details grid grid-cols-2 gap-20 px-5 pt-11 w-[70%] m-auto">
@@ -24,14 +52,13 @@ const Contact = () => {
             </h2>
             <p className="text-3xl pt-5">
               <span className="text-sky-500 text-2xl">Toll Free</span>{' '}
-              1-888-961-6584
+              {tollFree}
             </p>
             <p className="text-3xl">
-              <span className="text-sky-500 text-2xl">Local:</span>{' '}
-              1-888-961-6584
+              <span className="text-sky-500 text-2xl">Local: {local}</span>
             </p>
             <p className="text-3xl">
-              <span className="text-sky-500 text-2xl">Fax:</span> 1-888-908-6056
+              <span className="text-sky-500 text-2xl">Fax:</span> {fax}
             </p>
             <p className="text-sky-500 text-3xl">info@seesight-tours.com</p>
           </div>
@@ -83,7 +110,7 @@ const Contact = () => {
           <div className="location_map">
             <iframe
               title="Where are we Canada"
-              src={`https://www.google.com/maps?q=${canada_address[0]}${canada_address[1]}${canada_address[2]}&output=embed`}
+              src={`https://www.google.com/maps?q=${address?.[0]?.address1}${address?.[0]?.address2}${address?.[0]?.address3}&output=embed`}
               width="100%"
               height="100%"
               style={{ border: '0' }}
@@ -92,16 +119,7 @@ const Contact = () => {
           </div>
         </div>
         <div className="location2_content grid grid-cols-2">
-          <div className="location_map">
-            <iframe
-              title="Where are we USA"
-              src={`https://www.google.com/maps?q=${usa_address[0]}${usa_address[1]}${usa_address[2]}&output=embed`}
-              width="100%"
-              height="100%"
-              style={{ border: '0' }}
-              loading="lazy"
-            />
-          </div>
+          <div className="location_map"></div>
           <div className="location_Text bg-red-500 text-white text-center p-20">
             <h2 className="text-3xl font-bold">Where are we USA</h2>
             <br />
