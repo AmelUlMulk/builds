@@ -18,7 +18,7 @@ const PageHero = () => {
     display: flex;
     .PageHero_container {
       position: absolute;
-      left: 10%;
+      left: 14%;
       display: flex;
       justify-content: center;
       flex-direction: column;
